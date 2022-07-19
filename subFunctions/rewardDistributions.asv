@@ -1,0 +1,20 @@
+% generate stimulus reward distributions 
+%----------------------------------------------------
+clc 
+clear all 
+close all hidden
+
+rewardVals = [1:99];
+figure;
+
+x1 = gaussian_distribution([1:99], 60, 5);   %% HIGH-SAFE
+hold on 
+plot(x1, 'color', [1 0.62 0.62], 'linew', 1.2);
+
+x2 = gaussian_distribution([1:99], 60, 20);  %% HIGH-RISKY
+hold on 
+plot(x2, 'color', [1 0 0], 'linew', 1.2);
+
+x3 = gaussian_distribution([1:99], 40, 5);   %% LOW-SAFE
+
+x4 = gaussian_distribution([1:99], 40, 20);  %% LOW-RISKY

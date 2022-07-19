@@ -1,0 +1,55 @@
+function [rewardDists] = beta_distr
+clear all;
+close all;
+X=[0:1:100];
+%%% Using beta distributions
+% iters=100000;
+% subplot(2,1,1);
+% alpha=31.5;beta=alpha; % low-safe
+% R = betarnd(alpha,beta,1,iters)*80;
+% betas(1,:)=[mean(R) std(R)];
+% histogram(R,'BinEdges',X);hold on;
+% 
+% alpha=3.05;beta=alpha; % hlow-risky
+% R = betarnd(alpha,beta,1,iters)*80;
+% betas(2,:)=[mean(R) std(R)];
+% histogram(R,'BinEdges',X);
+% 
+% 
+% alpha=71.6;beta=alpha; % high-safe
+% R = betarnd(alpha,beta,1,iters)*120;
+% betas(3,:)=[mean(R) std(R)];
+% histogram(R,'BinEdges',X);hold on;
+% 
+% alpha=7.5;beta=alpha; % high-risky
+% R = betarnd(alpha,beta,1,iters)*120;
+% betas(4,:)=[mean(R) std(R)];
+% histogram(R,'BinEdges',X);
+% betas
+
+
+%%% Using a folded Gaussian
+% subplot(2,1,2);
+iters=100000;
+up_thr=100;
+mu_mat=[40 40 60 60];
+sd_mat=[5 15 5 15];
+col_plot = [220 188 224;,...
+    236 151 139;,...
+    0 255 158;,...
+    146 161 235];
+
+for i=1:4;
+    mu=mu_mat(i);sd=sd_mat(i); % low-safe
+    R = (randn(1,iters)*sd+mu);
+     
+    R((R<=mu | R>=up_thr))=[]; % censor
+    Q=mu-(R-mu); % replicated for lower end
+    R=[Q R]; %combine
+    folded(i,:)=[mean(R) std(R)];
+    hist(R, 'BinEdges', X);hold on
+%     h(i)  = histogram(R,'BinEdges',X);hold on;
+%     h(i).FaceColor = [col_plot(i, :)]./255;
+%     h(i).EdgeColor = [col_plot(i, :)]./255;
+    rewardDists{i} = R;
+end
